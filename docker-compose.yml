@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: proyecto_medico
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5458:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - medical-network
+
+  backend:
+    build: ./backend
+    ports:
+      - "5004:5000"
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_NAME=proyecto_medico
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_PORT=5432
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./backend:/app
+    networks:
+      - medical-network
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - backend
+    environment:
+      - FLET_SERVER_PORT=8000
+    volumes:
+      - ./frontend:/app
+    networks:
+      - medical-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  medical-network:
+    driver: bridge
