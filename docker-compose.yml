@@ -16,7 +16,9 @@ services:
       - medical-network
 
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
       - "5004:5000"
     depends_on:
@@ -35,7 +37,9 @@ services:
     restart: unless-stopped
 
   frontend:
-    build: ./frontend
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     depends_on:
@@ -47,6 +51,29 @@ services:
     networks:
       - medical-network
     restart: unless-stopped
+
+  ml:
+    build:
+      context: ./ml
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    depends_on:
+      - backend
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./ml:/app
+    networks:
+      - medical-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
 volumes:
   postgres_data:
