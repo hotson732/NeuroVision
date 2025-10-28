@@ -1,2 +1,2 @@
-flet>=0.10.0
-requests
+flet[all]==0.28.3
+requests==2.31.0
