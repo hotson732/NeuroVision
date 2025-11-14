@@ -1,11 +1,21 @@
 # src/views/login_views.py
 import flet as ft
+from src.views.upload_images import create_upload_images_view
 # Crea la vista de login completa
-def create_login_view():
+def create_login_view(page):
     """
     Crea la vista de login completa, basada en el diseño de Figma.
     """
-    
+    def on_login_click(e):
+        page.clean()
+        upload_view = create_upload_images_view(page)
+        centered_container = ft.Container(
+            content=upload_view,
+            alignment=ft.alignment.center,
+            expand=True
+        )
+        page.add(centered_container)
+        page.update()
     # Logo NeuroVision:
 
     logo_image = ft.Image(
@@ -91,10 +101,10 @@ def create_login_view():
     bgcolor="#1B33E7", 
     color="white",  
     width=320,
-        height=45,
-        style=ft.ButtonStyle(
-            shape=ft.RoundedRectangleBorder(radius=8),
-
+    height=45,
+    on_click=on_login_click,
+    style=ft.ButtonStyle(
+        shape=ft.RoundedRectangleBorder(radius=8),
         text_style=ft.TextStyle(
             font_family = 'Inter',
             size=16,               # Tamaño de la letra

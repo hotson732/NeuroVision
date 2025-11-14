@@ -1,7 +1,9 @@
 import flet as ft
 import os
+from src.router import Router
 # Importamos la función que crea la vista login (src.views.login_views)
-from src.views.login_views import create_login_view 
+
+
 
 def main(page: ft.Page):
     page.title = "NeuroVision" # Título de la página
@@ -13,19 +15,9 @@ def main(page: ft.Page):
     page.assets_dir = assets_path
 
     # Creamos la vista de login llamando a la función
-    login_view_content = create_login_view()
+    router = Router(page)
 
-    # Usamos un Contenedor principal para centrar la vista en la página
-    centered_container = ft.Container(
-        content=login_view_content,
-        alignment=ft.alignment.center,
-        expand=True # Hace que el contenedor ocupe toda la página
-    )
-    
-    # Añadimos el contenedor centrxado a la página
-    page.add(centered_container)
-    page.update()
-
+    router.navigate_to("/login")
 class MedicalApp:
     def __init__(self):
         self.backend_url = os.environ.get("BACKEND_URL", "http://backend:5000")

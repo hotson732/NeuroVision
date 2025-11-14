@@ -1,6 +1,6 @@
 #src/views/upload_images.py
 
-def create_upload_images_view():
+def create_upload_images_view(page):
     """Crea la vista de subida de imágenes (prototipo).
 
     La función devuelve un control `ft.Column` que puede añadirse directamente
@@ -8,10 +8,11 @@ def create_upload_images_view():
     """
 
     import flet as ft
+    from flet import Icons
 
     # Preview image control (vacío por defecto)
     preview_image = ft.Image(
-        src="",
+        #src="",
         width=360,
         height=360,
         fit=ft.ImageFit.CONTAIN
@@ -61,11 +62,11 @@ def create_upload_images_view():
         file_picker.pick_files(allow_multiple=False)
 
     # Botones inferiores
-    info_button = ft.IconButton(icon=ft.icons.INFO_OUTLINE, icon_color="#6B6B6B", tooltip="Información")
+    info_button = ft.IconButton(icon=Icons.INFO_OUTLINE, icon_color="#6B6B6B", tooltip="Información")
 
     upload_button = ft.ElevatedButton(
         "Subir Imagen",
-        icon=ft.icons.ADD,
+        icon=Icons.ADD,
         bgcolor="#3048FF",
         color="white",
         on_click=on_click_upload,
@@ -76,7 +77,7 @@ def create_upload_images_view():
 
     analyze_button = ft.ElevatedButton(
         "Generar Análisis",
-        icon=ft.icons.AUTOMATION,
+        icon=Icons.PLAY_ARROW,
         bgcolor="#77B800",
         color="white",
         height=44,
@@ -86,7 +87,7 @@ def create_upload_images_view():
 
     history_button = ft.ElevatedButton(
         "Historial de Análisis",
-        icon=ft.icons.FOLDER_OPEN,
+        icon=Icons.FOLDER_OPEN,
         bgcolor="#C9A300",
         color="white",
         height=44,
