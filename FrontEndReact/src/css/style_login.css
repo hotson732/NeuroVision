@@ -1,0 +1,125 @@
+/* Contenedor general */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ececec;
+    padding: 20px;
+    gap: 200px; 
+}
+
+/* LOGO Box */
+.login-logo {
+    width: 33%;
+    max-width: 553px;
+    height: 760px;
+    background-color:#080D2D;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.login-logo img {
+    width: 80%;
+    object-fit: contain;
+}
+
+
+
+
+.bienvenido {
+    color: #4d4d4d;
+    margin-bottom: 5px;
+    font-size: 20px;
+    text-decoration: medium;
+    font-weight: 500;
+}
+
+/* Título */
+h1 {
+    margin-top: 60px;
+    align-content: center;
+    margin: 0;
+    margin-bottom: 25px;
+    text-decoration: bould;
+    font-size: 48px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Inputs */
+input {
+   
+    width: 90%;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #b3b3b3;
+    background: #eee;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+.usuario {
+    margin-top: 50px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #1B33E7;
+    background-color: #fff;
+}
+
+/* Botón azul */
+button.inicio {
+    width: 95%;
+    padding: 12px;
+    background-color: #0038ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 90px;
+}
+
+button.inicio:hover {
+    background-color: #0026b3;
+}
+
+/* Botón registro */
+button.registrar {
+    width: 95%;
+    padding: 12px;
+    background-color: #e5e5e5;
+    color: #333;
+    border: 1px solid #b3b3b3;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+button.registrar:hover {
+    background-color: #d1d1d1;
+}
+
+/* Ícono de mostrar contraseña en posición correcta */
+.password-container {
+    position: relative;
+    width: 90%;
+}
+
+.password-container input {
+    width: 100%;
+}
+
+.password-container .toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
