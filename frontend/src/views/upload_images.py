@@ -1,192 +1,329 @@
 #src/views/upload_images.py
 
 def create_upload_images_view(page):
-    """Crea la vista de subida de imágenes (prototipo).
-
-    La función devuelve un control `ft.Column` que puede añadirse directamente
-    a la página principal como en `login_views.py`.
-    """
+    """Crea la vista de subida de imágenes con diseño profesional y responsivo."""
 
     import flet as ft
     from flet import Icons
 
-    # Preview image control (vacío por defecto)
-    preview_image = ft.Image(
-        #src="",
+    # Paleta de colores profesional
+    PRIMARY_COLOR = "#0B2163"
+    SECONDARY_COLOR = "#00A3FF"
+    SUCCESS_COLOR = "#77B800"
+    WARNING_COLOR = "#C9A300"
+    DANGER_COLOR = "#FF5252"
+    LIGHT_BG = "#F5F7FA"
+    CARD_BG = "#FFFFFF"
+    TEXT_PRIMARY = "#1A1A1A"
+    TEXT_SECONDARY = "#6B7280"
+    BORDER_COLOR = "#E5E7EB"
+
+    # Estado compartido
+    preview_image = ft.Container(
         width=360,
         height=360,
-        fit=ft.ImageFit.CONTAIN
+        bgcolor="#FFFFFF",
+        border_radius=ft.border_radius.all(12),
+        alignment=ft.alignment.center,
+        content=ft.Column(
+            controls=[
+                ft.Icon(Icons.IMAGE_NOT_SUPPORTED, size=80, color="#D1D5DB"),
+                ft.Text(
+                    "Sin imagen",
+                    size=16,
+                    color="#9CA3AF",
+                    text_align=ft.TextAlign.CENTER
+                )
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=10
+        )
     )
+    filename_text = ft.Text("", size=12, color=TEXT_SECONDARY, italic=True)
 
-    filename_text = ft.Text("", size=12, color="#6B6B6B")
+    # Campos del formulario con estilos mejorados
+    def create_text_field(label, multiline=False, height=None):
+        return ft.TextField(
+            label=label,
+            width=360,
+            height=height,
+            multiline=multiline,
+            min_lines=1 if multiline else None,
+            border=ft.InputBorder.OUTLINE,
+            border_radius=ft.border_radius.all(8),
+            border_color=BORDER_COLOR,
+            filled=True,
+            fill_color="#FAFBFC",
+            label_style=ft.TextStyle(size=12, color=TEXT_SECONDARY),
+            text_style=ft.TextStyle(size=13, color=TEXT_PRIMARY),
+        )
 
-    # Campos del formulario (derecha)
-    id_field = ft.TextField(label="ID Paciente", width=360, border=ft.InputBorder.OUTLINE, border_radius=ft.border_radius.all(6))
-    name_field = ft.TextField(label="Nombre Paciente", width=360, border=ft.InputBorder.OUTLINE, border_radius=ft.border_radius.all(6))
-    study_field = ft.TextField(label="Tipo de Estudio", width=360, border=ft.InputBorder.OUTLINE, border_radius=ft.border_radius.all(6))
-    date_field = ft.TextField(label="Fecha Análisis", width=360, border=ft.InputBorder.OUTLINE, border_radius=ft.border_radius.all(6))
-    notes_field = ft.TextField(label="Notas del Médico", width=360, height=140, multiline=True, border=ft.InputBorder.OUTLINE, border_radius=ft.border_radius.all(6))
+    id_field = create_text_field("ID Paciente")
+    name_field = create_text_field("Nombre Paciente")
+    study_field = create_text_field("Tipo de Estudio")
+    date_field = create_text_field("Fecha Análisis")
+    notes_field = create_text_field("Notas del Médico", multiline=True, height=120)
 
-    # Handler para el resultado del FilePicker
+    # Handlers
     def on_file_picker_result(e: ft.FilePickerResultEvent):
-        # Si se seleccionó un archivo, actualizar vista previa y nombre
         if e.files and len(e.files) > 0:
             f = e.files[0]
-            # Intentar usar la ruta local (funciona en modo escritorio); en web puede requerir conversión
             try:
-                preview_image.src = f.path
+                # Crear imagen desde la ruta del archivo
+                image = ft.Image(
+                    src=f.path,
+                    width=360,
+                    height=360,
+                    fit=ft.ImageFit.CONTAIN
+                )
+                preview_image.content = image
             except Exception:
-                # Fallback: si existe base64, usarla
                 if hasattr(f, "read_bytes"):
                     try:
                         b = f.read_bytes()
                         import base64
-
-                        preview_image.src_base64 = base64.b64encode(b).decode("utf-8")
+                        image = ft.Image(
+                            src_base64=base64.b64encode(b).decode("utf-8"),
+                            width=360,
+                            height=360,
+                            fit=ft.ImageFit.CONTAIN
+                        )
+                        preview_image.content = image
                     except Exception:
                         pass
             filename_text.value = f.name
-            # Forzar actualización en la página (cuando el control esté en la página)
             try:
                 preview_image.update()
                 filename_text.update()
             except Exception:
                 pass
 
-    # Botón que abre FilePicker
-    def on_click_upload(e: ft.ControlEvent):
-        # Crear FilePicker dinámicamente y añadirlo al overlay para obtener resultado
+    def on_click_upload(e):
         file_picker = ft.FilePicker(on_result=on_file_picker_result)
-        # permite la interacción
         e.page.overlay.append(file_picker)
         file_picker.pick_files(allow_multiple=False)
 
-    # Botones inferiores
-    info_button = ft.IconButton(icon=Icons.INFO_OUTLINE, icon_color="#6B6B6B", tooltip="Información")
+    # ============ HEADER ============
+    menu_items = [
+        ft.PopupMenuItem(text="Inicio", icon=Icons.HOME),
+        ft.PopupMenuItem(text="Análisis", icon=Icons.ANALYTICS),
+        ft.PopupMenuItem(text="Historial", icon=Icons.HISTORY),
+        ft.PopupMenuItem(),  # Divisor
+        ft.PopupMenuItem(text="Configuración", icon=Icons.SETTINGS),
+    ]
 
-    upload_button = ft.ElevatedButton(
-        "Subir Imagen",
-        icon=Icons.ADD,
-        bgcolor="#3048FF",
-        color="white",
-        on_click=on_click_upload,
-        style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8)),
-        height=44,
-        width=220
+    header = ft.Container(
+        height=90,
+        bgcolor=PRIMARY_COLOR,
+        padding=ft.padding.symmetric(horizontal=24, vertical=12),
+        content=ft.Row(
+            controls=[
+                # Logo
+                ft.Container(
+                    content=ft.Image(src="logo.png", width=180, height=90, fit=ft.ImageFit.CONTAIN),
+                    width=200,
+                    alignment=ft.alignment.center_left
+                ),
+                # Título
+                ft.Container(
+                    content=ft.Text(
+                        "Neurovision V0.01",
+                        color="#FFFFFF",
+                        size=16,
+                        weight=ft.FontWeight.W_700
+                    ),
+                    alignment=ft.alignment.center,
+                    expand=True
+                ),
+                # Menú con PopupMenuButton (responsivo)
+                ft.PopupMenuButton(
+                    items=menu_items,
+                    icon=Icons.MORE_VERT,
+                    icon_color="#FFFFFF",
+                    tooltip="Menú"
+                ),
+            ],
+            vertical_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=16
+        )
     )
 
-    analyze_button = ft.ElevatedButton(
-        "Generar Análisis",
-        icon=Icons.PLAY_ARROW,
-        bgcolor="#77B800",
-        color="white",
-        height=44,
-        width=220,
-        style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))
-    )
-
-    history_button = ft.ElevatedButton(
-        "Historial de Análisis",
-        icon=Icons.FOLDER_OPEN,
-        bgcolor="#C9A300",
-        color="white",
-        height=44,
-        width=220,
-        style=ft.ButtonStyle(shape=ft.RoundedRectangleBorder(radius=8))
-    )
-
-    # Contenedor izquierdo (preview)
+    # ============ ÁREA PRINCIPAL ============
+    # Preview Container - Mejorado
     preview_container = ft.Container(
         content=ft.Column(
             controls=[
-                ft.Container(height=8),
-                ft.Container(
-                    content=preview_image,
-                    width=380,
-                    height=380,
-                    bgcolor="#EDEDED",
-                    border_radius=ft.border_radius.all(12),
-                    padding=ft.padding.all(12),
-                    alignment=ft.alignment.center
+                ft.Text(
+                    "Vista Previa DICOM",
+                    size=14,
+                    weight=ft.FontWeight.W_600,
+                    color=TEXT_PRIMARY
                 ),
-                ft.Container(height=8),
-                filename_text
+                ft.Container(height=12),
+                preview_image,
+                ft.Container(height=12),
+                ft.Container(
+                    content=ft.Row(
+                        controls=[
+                            ft.Icon(Icons.FILE_PRESENT, size=16, color=SECONDARY_COLOR),
+                            ft.Container(width=6),
+                            filename_text
+                        ],
+                        spacing=0
+                    )
+                )
             ],
-            alignment=ft.MainAxisAlignment.START,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER
+            spacing=0,
+            horizontal_alignment=ft.CrossAxisAlignment.START
         ),
         width=420,
-        height=520,
-        padding=ft.padding.all(6)
-    )
-
-    # Contenedor derecho (formulario)
-    form_column = ft.Column(
-        controls=[
-            id_field,
-            name_field,
-            study_field,
-            date_field,
-            notes_field
-        ],
-        alignment=ft.MainAxisAlignment.START,
-        horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
-        spacing=12
-    )
-
-    form_container = ft.Container(
-        content=form_column,
-        width=420,
-        height=520,
-        bgcolor="#EDEDED",
+        padding=ft.padding.all(24),
+        bgcolor=CARD_BG,
         border_radius=ft.border_radius.all(12),
-        padding=ft.padding.symmetric(horizontal=18, vertical=18)
     )
 
-    # Fila principal
-    main_row = ft.Row(
+    # Form Container - Mejorado
+    form_container = ft.Container(
+        content=ft.Column(
+            controls=[
+                ft.Text(
+                    "Datos del Paciente",
+                    size=14,
+                    weight=ft.FontWeight.W_600,
+                    color=TEXT_PRIMARY
+                ),
+                ft.Container(height=16),
+                id_field,
+                name_field,
+                study_field,
+                date_field,
+                notes_field,
+            ],
+            spacing=12,
+            horizontal_alignment=ft.CrossAxisAlignment.STRETCH
+        ),
+        width=420,
+        padding=ft.padding.all(24),
+        bgcolor=CARD_BG,
+        border_radius=ft.border_radius.all(12),
+    )
+
+    # Main content row - Responsivo
+    content_row = ft.Row(
         controls=[preview_container, form_container],
         alignment=ft.MainAxisAlignment.CENTER,
-        vertical_alignment=ft.CrossAxisAlignment.CENTER,
-        spacing=48
+        vertical_alignment=ft.CrossAxisAlignment.START,
+        spacing=32,
+        wrap=True  # Para responsividad en pantallas pequeñas
     )
 
-    # Botones al fondo, centrados
+    # ============ BOTONES DE ACCIÓN ============
+    # Botón de información
+    info_button = ft.IconButton(
+        icon=Icons.INFO_OUTLINED,
+        icon_color="#FFFFFF",
+        bgcolor=SECONDARY_COLOR,
+        tooltip="Información",
+    )
+
+    # Botón Subir
+    upload_btn = ft.ElevatedButton(
+        text="Subir Imagen",
+        icon=Icons.CLOUD_UPLOAD,
+        bgcolor="#3048FF",
+        color="#FFFFFF",
+        on_click=on_click_upload,
+        height=48,
+        width=200,
+        style=ft.ButtonStyle(
+            shape=ft.RoundedRectangleBorder(radius=10),
+        ),
+    )
+
+    # Botón Analizar
+    analyze_btn = ft.ElevatedButton(
+        text="Generar Análisis",
+        icon=Icons.PLAY_ARROW,
+        bgcolor=SUCCESS_COLOR,
+        color="#FFFFFF",
+        height=48,
+        width=200,
+        style=ft.ButtonStyle(
+            shape=ft.RoundedRectangleBorder(radius=10),
+        ),
+    )
+
+    # Botón Historial
+    history_btn = ft.ElevatedButton(
+        text="Historial",
+        icon=Icons.FOLDER_OPEN,
+        bgcolor=WARNING_COLOR,
+        color="#FFFFFF",
+        height=48,
+        width=200,
+        style=ft.ButtonStyle(
+            shape=ft.RoundedRectangleBorder(radius=10),
+        ),
+    )
+
+    # Fila de botones - Responsiva
     buttons_row = ft.Row(
         controls=[
             info_button,
-            ft.Container(width=12),
-            upload_button,
-            ft.Container(width=12),
-            analyze_button,
-            ft.Container(width=12),
-            history_button
-        ],
-        alignment=ft.MainAxisAlignment.CENTER
-    )
-
-    footer_text = ft.Text("© 2025 NeuroVision", size=11, color="#6B6B6B")
-
-    main_column = ft.Column(
-        controls=[
-            # Título superior
-            ft.Row(
-                controls=[
-                    ft.Text("Neurovision V0.01", size=14, weight=ft.FontWeight.W_700, color="#0B2163"),
-                ],
-                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-                vertical_alignment=ft.CrossAxisAlignment.CENTER
-            ),
-            ft.Container(height=14),
-            main_row,
-            ft.Container(height=22),
-            buttons_row,
-            ft.Container(height=18),
-            footer_text
+            upload_btn,
+            analyze_btn,
+            history_btn,
         ],
         alignment=ft.MainAxisAlignment.CENTER,
-        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-        spacing=6
+        spacing=20,
+        wrap=True
+    )
+
+    # ============ FOOTER ============
+    footer = ft.Container(
+        content=ft.Row(
+            controls=[
+                ft.Text(
+                    "© 2025 NeuroVision - Sistema de Análisis Médico",
+                    size=11,
+                    color=TEXT_SECONDARY,
+                    italic=True
+                )
+            ],
+            alignment=ft.MainAxisAlignment.CENTER
+        ),
+        padding=ft.padding.symmetric(vertical=12),
+        bgcolor=LIGHT_BG,
+    )
+
+    # ============ LAYOUT PRINCIPAL ============
+    main_column = ft.Column(
+        controls=[
+            header,
+            ft.Container(
+                content=ft.Column(
+                    controls=[
+                        ft.Container(height=24),
+                        content_row,
+                        ft.Container(height=32),
+                        buttons_row,
+                        ft.Container(height=24),
+                    ],
+                    alignment=ft.MainAxisAlignment.START,
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                    spacing=0
+                ),
+                bgcolor=LIGHT_BG,
+                expand=True,
+                padding=ft.padding.symmetric(horizontal=16)
+            ),
+            footer
+        ],
+        alignment=ft.MainAxisAlignment.START,
+        horizontal_alignment=ft.CrossAxisAlignment.STRETCH,
+        spacing=0,
+        expand=True
     )
 
     return main_column

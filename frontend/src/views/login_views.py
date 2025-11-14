@@ -9,12 +9,7 @@ def create_login_view(page):
     def on_login_click(e):
         page.clean()
         upload_view = create_upload_images_view(page)
-        centered_container = ft.Container(
-            content=upload_view,
-            alignment=ft.alignment.center,
-            expand=True
-        )
-        page.add(centered_container)
+        page.add(upload_view)
         page.update()
     # Logo NeuroVision:
 
