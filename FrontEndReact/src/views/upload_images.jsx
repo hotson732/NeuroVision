@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useState }from "react";
 import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
+import Formato_imagen from "./formato_imagen";
 import Menu from "../components/Nadbar";
 
 const Upload_images = () => {
+  // estado para controlar el modal
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // manejar archivos seleccionados desde el modal
+  const handleFilesSubmit = (files) => {
+    const fd = new FormData();
+    files.forEach((f) => fd.append("images", f));
+    // TODO: enviar fd al backend con fetch/axios
+    console.log("Archivos a subir:", files);
+  };
+
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "white" }}>
       {/* MENÚ SUPERIOR */}
@@ -101,6 +113,7 @@ const Upload_images = () => {
                   border: "none",
                   fontWeight: "600",
                 }}
+                onClick={() => setModalOpen(true)}
               >
                 Subir Imagen
               </Button>
@@ -140,6 +153,13 @@ const Upload_images = () => {
           </Row>
         </div>
       </Container>
+
+      {/* Modal de formato de imagen */}
+      <Formato_imagen
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubmit={handleFilesSubmit}
+      />
 
       <style jsx>{`
         .input-neuro {

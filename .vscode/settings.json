@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./frontend/src/views",
+        "./frontend/src"
+    ]
+}
