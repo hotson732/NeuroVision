@@ -1,27 +1,30 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
 import Formato_imagen from "./formato_imagen";
 import Analisis_imagen from "./analisis_imagen";
 import Menu from "../components/Nadbar";
 
 const Upload_images = () => {
+  // estado para controlar el modal
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalAnalisisOpen, setModalAnalisisOpen] = useState(false);
+  const [ModalAnalisisOpen, setModalAnalisisOpen] = useState(false);
 
+  // manejar archivos seleccionados desde el modal
   const handleFilesSubmit = (files, url) => {
-    // Solo log, sin guardar nada
-    console.log("Archivos seleccionados:", files);
-    console.log("URL (si aplica):", url);
-    // Cierra el modal de formato
-    setModalOpen(false);
+    const fd = new FormData();
+    files.forEach((f) => fd.append("images", f));
+    // TODO: enviar fd al backend con fetch/axios
+    console.log("Archivos a subir:", files);
   };
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "white" }}>
+      {/* MENÚ SUPERIOR */}
       <header>
         <Menu />
       </header>
 
+      {/* CONTENIDO PRINCIPAL CENTRADO */}
       <Container className="py-4 d-flex justify-content-center">
         <div 
           style={{ 
@@ -99,7 +102,7 @@ const Upload_images = () => {
             </Col>
           </Row>
 
-          {/* BOTONES */}
+          {/* BOTONES GRANDES ABAJO - CENTRADOS */}
           <Row className="mt-5 justify-content-center">
             <Col md={4} className="d-flex justify-content-center mb-3">
               <Button
@@ -129,7 +132,6 @@ const Upload_images = () => {
                   border: "none",
                   fontWeight: "600",
                 }}
-                onClick={() => setModalAnalisisOpen(true)}
               >
                 Generar Análisis
               </Button>
@@ -159,13 +161,6 @@ const Upload_images = () => {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={handleFilesSubmit}
-      />
-
-      {/* Modal de análisis */}
-      <Analisis_imagen
-        open={modalAnalisisOpen}
-        onClose={() => setModalAnalisisOpen(false)}
-        data={null}
       />
 
       <style jsx>{`
