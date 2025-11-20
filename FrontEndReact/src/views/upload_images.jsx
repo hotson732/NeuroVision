@@ -1,14 +1,16 @@
-import React, { useState }from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
 import Formato_imagen from "./formato_imagen";
+import Analisis_imagen from "./analisis_imagen";
 import Menu from "../components/Nadbar";
 
 const Upload_images = () => {
   // estado para controlar el modal
   const [modalOpen, setModalOpen] = useState(false);
+  const [ModalAnalisisOpen, setModalAnalisisOpen] = useState(false);
 
   // manejar archivos seleccionados desde el modal
-  const handleFilesSubmit = (files) => {
+  const handleFilesSubmit = (files, url) => {
     const fd = new FormData();
     files.forEach((f) => fd.append("images", f));
     // TODO: enviar fd al backend con fetch/axios

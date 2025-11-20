@@ -5,7 +5,8 @@ import Upload_images from './views/upload_images';
 import Historial_pacientes from './views/historial_pacientes';
 import Registro_pacientes from './views/registro_pacientes';
 import Registro_usuarios from './views/registro_usuarios';
-import Formato_imagen from './views/formato_imagen'
+import Formato_imagen from './views/formato_imagen';
+import Analisis_imagen from './views/analisis_imagen'
 
 function App() {
   return (
