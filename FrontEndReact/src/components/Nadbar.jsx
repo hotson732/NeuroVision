@@ -88,7 +88,12 @@ function Menu() {
                             >
                                 Historial de pacientes
                             </Dropdown.Item>
-                            
+                            <Dropdown.Item 
+                                style={{ color: 'white' }}
+                                onClick={() => handleNavigation('/Upload_images')}
+                            >
+                                Subir imagenes
+                            </Dropdown.Item>
                             <Dropdown.Divider style={{ backgroundColor: 'rgba(255,255,255,0.2)' }} />
                             
                             <Dropdown.Item 
