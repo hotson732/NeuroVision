@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
 import Formato_imagen from "./formato_imagen";
-import Analisis_imagen from "./analisis_imagen";
+import Analisis_imagen from "./analisis_imagen"; // Asegúrate que la ruta sea correcta
 import Menu from "../components/Nadbar";
 
 const Upload_images = () => {
@@ -132,6 +132,8 @@ const Upload_images = () => {
                   border: "none",
                   fontWeight: "600",
                 }}
+                // CORRECCIÓN 1: Agregar el evento onClick
+                onClick={() => setModalAnalisisOpen(true)}
               >
                 Generar Análisis
               </Button>
@@ -161,6 +163,12 @@ const Upload_images = () => {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={handleFilesSubmit}
+      />
+
+      {/* CORRECCIÓN 2: Renderizar el componente del Modal de Análisis */}
+      <Analisis_imagen 
+        open={ModalAnalisisOpen} 
+        onClose={() => setModalAnalisisOpen(false)}
       />
 
       <style jsx>{`
