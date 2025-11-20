@@ -13,7 +13,7 @@
 .login-logo {
     width: 33%;
     max-width: 553px;
-    height: 760px;
+    height: 98%;
     background-color:#080D2D;
     border-radius: 25px;
     display: flex;
@@ -64,7 +64,11 @@ input {
 .usuario {
     margin-top: 50px;
 }
+.contraseña{
+margin-top: 15px;
 
+
+}
 input:focus {
     outline: none;
     border-color: #1B33E7;
@@ -106,7 +110,6 @@ button.registrar:hover {
     background-color: #d1d1d1;
 }
 
-/* Ícono de mostrar contraseña en posición correcta */
 .password-container {
     position: relative;
     width: 90%;

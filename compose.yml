@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16.10
+    container_name: neurovision_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: neurovision
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    laravel:
+        image: php:8.2-fpm
+        container_name: neurovision_laravel
+        working_dir: /app
+        volumes:
+          - ./:/app
+        environment:
+          - DB_CONNECTION=pgsql
+          - DB_HOST=postgres
+          - DB_PORT=5432
+          - DB_DATABASE=neurovision
+          - DB_USERNAME=user
+          - DB_PASSWORD=password
+        depends_on:
+  node:
+    image: node:20-alpine
+    container_name: neurovision_node
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    command: npm install && npm start
+
+  php:
+    image: composer:latest
+    container_name: neurovision_php
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: composer install
+
+volumes:
+  postgres_data:
