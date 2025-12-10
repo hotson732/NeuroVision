@@ -1,0 +1,37 @@
+.custom-navbar {
+  background-color: #080D2D !important;
+  min-height: 60px;
+  padding: 5px 0;
+  border-bottom: none;
+}
+
+.navbar-logo {
+  height: 45px;
+  width: auto;
+  max-width: 200px;
+}
+
+.navbar-text {
+  color: white !important;
+  font-size: 14px;
+}
+
+.navbar-link {
+  color: #4dabf7 !important;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.navbar-link:hover {
+  color: #74c0fc !important;
+  text-decoration: underline;
+}
+
+/* Para el botón toggle en móviles */
+.navbar-toggler {
+  border-color: rgba(255,255,255,0.5) !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
