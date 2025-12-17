@@ -32,7 +32,21 @@ class GenerarAnalisis extends Controller
 
 if ($request->image_url) {
     try {
-        $img = Http::get($request->image_url)->body();
+        $response = Http::withHeaders([
+    'User-Agent' => 'Mozilla/5.0',
+])->get($request->image_url);
+
+if ($response->successful()) {
+    $img = $response->body();
+    $imageBase64 = 'data:image/jpeg;base64,' . base64_encode($img);
+} else {
+    Log::error('❌ Drive respondió error', [
+        'status' => $response->status()
+    ]);
+}Log::info('🟣 Imagen descargada', [
+    'bytes' => strlen($img ?? ''),
+]);
+
         $imageBase64 = 'data:image/jpeg;base64,' . base64_encode($img);
     } catch (\Exception $e) {
         $imageBase64 = null;
@@ -46,6 +60,7 @@ if ($request->image_url) {
     'fecha' => $request->fecha_estudio ?? now()->format('Y-m-d'),
     'notas' => $request->notas_medico ?? 'Sin observaciones',
     'analisis' => $analisisSeleccionado,
+    'imagen' => $imageBase64, 
     ];
 
     Log::info('🟠 Antes de generar PDF');

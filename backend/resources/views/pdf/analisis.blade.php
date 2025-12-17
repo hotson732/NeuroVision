@@ -35,7 +35,12 @@
     <div class="section">
         <span class="label">Tipo de estudio:</span> {{ $tipo_estudio }}
     </div>
-
+@if($imagen)
+    <div class="imagen">
+        <p><strong>Imagen del estudio</strong></p>
+        <img src="{{ $imagen }}">
+    </div>
+@endif
     <div class="section">
         <span class="label">Fecha:</span> {{ $fecha }}
     </div>

@@ -135,6 +135,10 @@ class EstudioController extends Controller
             ]
         ], 201);
 
+
+
+        
+
     } catch (\Exception $e) {
         Log::error('ERROR en uploadImage: ' . $e->getMessage());
         Log::error('Trace: ' . $e->getTraceAsString());

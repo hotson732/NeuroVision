@@ -31,7 +31,7 @@ const handleGenerateAnalysis = async () => {
       notas_medico: formData.notas_medico,
       image_url: uploadedImageUrl
     };
-
+console.log("URL enviada al backend:", uploadedImageUrl);
     const response = await axios.post(`${API_URL}/generar-analisis`, payload, {
    
       responseType: 'blob'
@@ -494,7 +494,6 @@ const handleGenerateAnalysis = async () => {
                   border: "none",
                   fontWeight: "600",
                   opacity: 0.6,
-                  cursor: 'not-allowed'
                 }}
               >
                  Generar Análisis IA
