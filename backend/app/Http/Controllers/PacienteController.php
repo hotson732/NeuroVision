@@ -38,7 +38,7 @@ class PacienteController extends Controller
                 'genero' => 'required|string|in:Masculino,Femenino,Otro',
                 'numero_historia_clinica' => 'required|string|unique:pacientes,numero_historia_clinica',
                 'antecedentes_medicos' => 'nullable|string',
-                'creado_por' => 'required|uuid' // Debe ser un UUID válido
+                'creado_por' => 'nullable|uuid' 
             ]);
 
             // Generar UUID para el paciente

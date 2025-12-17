@@ -110,58 +110,64 @@ const Registro_pacientes = () => {
     });
   };
 
-  const handleSavePatient = async () => {
-    const validationError = validateForm();
-    if (validationError) {
-      setMessage(validationError);
-      return;
-    }
+ const handleSavePatient = async () => {
+  const validationError = validateForm();
+  if (validationError) {
+    setMessage(validationError);
+    return;
+  }
 
-    try {
-      setLoading(true);
-      setMessage("");
-      
-      // Preparar datos
-      const patientData = { ...formData };
-      
-      // Generar UUID para el paciente si es nuevo
-      if (!editPatientId) {
-        patientData.id_paciente = generateUUID();
-      }
-      
-      // Asignar usuario creador
-      const currentUser = getCurrentUser();
-      if (currentUser && currentUser.id_usuario) {
-        patientData.creado_por = currentUser.id_usuario;
-      } else {
-        patientData.creado_por = "00000000-0000-0000-0000-000000000000";
-      }
-
-      if (editPatientId) {
-        // Actualizar paciente existente
-        await patientService.updatePatient(editPatientId, patientData);
-        setMessage("✅ Paciente actualizado correctamente");
-      } else {
-        // Crear nuevo paciente
-        await patientService.createPatient(patientData);
-        setMessage("✅ Paciente creado correctamente");
-      }
-      
-      // Actualizar lista
-      await fetchPatients();
-      setShowModal(false);
-      clearForm();
-      
-      // Limpiar mensaje después de 3 segundos
-      setTimeout(() => setMessage(""), 3000);
-      
-    } catch (err) {
-      setMessage(`❌ Error: ${err.message}`);
-      console.error("Error saving patient:", err);
-    } finally {
-      setLoading(false);
+  try {
+    setLoading(true);
+    setMessage("");
+    
+    // Preparar datos
+    const patientData = { ...formData };
+    
+    // Generar UUID para el paciente si es nuevo
+    if (!editPatientId) {
+      patientData.id_paciente = generateUUID();
     }
-  };
+    
+    // ASIGNAR USUARIO CREADOR - CORRECCIÓN
+    const currentUser = getCurrentUser();
+    
+    if (currentUser && currentUser.id) {
+      // Usar la propiedad 'id' (que es el UUID del usuario)
+      patientData.creado_por = currentUser.id;
+    } else {
+      // Si no hay usuario, usar un UUID por defecto (usuario administrador)
+      patientData.creado_por = "dbaf62fd-3dc2-4cf2-90b6-0f606de365a8"; // Este es el mismo ID que tienes
+    }
+    
+    // Verificación final
+   
+    
+    if (editPatientId) {
+      // Actualizar paciente existente
+      await patientService.updatePatient(editPatientId, patientData);
+      setMessage("✅ Paciente actualizado correctamente");
+    } else {
+      // Crear nuevo paciente
+      await patientService.createPatient(patientData);
+      setMessage("✅ Paciente creado correctamente");
+    }
+    
+    // Actualizar lista
+    await fetchPatients();
+    setShowModal(false);
+    clearForm();
+    
+    // Limpiar mensaje después de 3 segundos
+    setTimeout(() => setMessage(""), 3000);
+    
+  } catch (err) {
+    setMessage(` Error: ${err.message}`);
+    console.error(" Error detallado:", err);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleEditPatient = (patient) => {
     setSelectedPatient(patient);
@@ -314,7 +320,6 @@ const Registro_pacientes = () => {
                    Registro de Pacientes
                 </h1>
                 <p className="text-muted">
-                  Gestión completa de historias clínicas de pacientes
                 </p>
               </div>
               <div className="d-flex gap-2">

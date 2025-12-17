@@ -13,6 +13,7 @@ class Paciente extends Model
     protected $primaryKey = 'id_paciente';
     public $incrementing = false;
     protected $keyType = 'string';
+    public $timestamps = false;
 
     protected $fillable = [
         'id_paciente',
@@ -30,7 +31,4 @@ class Paciente extends Model
         'fecha_nacimiento' => 'date',
         'fecha_creacion' => 'datetime',
     ];
-
-    // Deshabilitar timestamps completamente
-    public $timestamps = false;
 }

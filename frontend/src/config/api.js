@@ -7,6 +7,16 @@ const API_CONFIG = {
     UPDATE: '/pacientes',
     DESTROY: '/pacientes',
     SEARCH: '/pacientes/search'
+  },
+  ESTUDIOS: {
+    INDEX: '/estudios',
+    STORE: '/estudios',
+    SHOW: '/estudios',
+    UPDATE: '/estudios',
+    DESTROY: '/estudios',
+    SEARCH: '/estudios/buscar',
+    ESTADISTICAS: '/estudios/estadisticas',
+    BY_PACIENTE: '/estudios/paciente'
   }
 };
 

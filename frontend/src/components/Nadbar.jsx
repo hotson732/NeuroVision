@@ -63,7 +63,7 @@ function Menu() {
         // Limpiar localStorage al cerrar sesión
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        navigate('/');
+        navigate('/login');
     };
 
     return (

@@ -34,7 +34,7 @@ api.interceptors.response.use(
       if (error.response.status === 401) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        window.location.href = '/login';
+        window.location.href = '/';
       }
       
       // Error 403 - Prohibido (sin permisos)
@@ -87,19 +87,20 @@ class PatientService {
 
  async createPatient(patientData) {
   try {
-    // Generar UUID en el frontend si no viene
+    // DEPURACIÓN: Ver qué datos llegan
+
+    // NO sobrescribir creado_por - ya viene del componente
+    // Solo generar id_paciente si no existe
     if (!patientData.id_paciente) {
       patientData.id_paciente = this.generateUUID();
     }
     
-    // Obtener usuario logueado
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    patientData.creado_por = user.id_usuario || 'system';
     
     const response = await api.post(API_CONFIG.PATIENTS.STORE, patientData);
     return response.data.data || response.data;
   } catch (error) {
-    console.error('Error creating patient:', error);
+    console.error('❌ Error creating patient:', error);
+    console.error('Detalles del error:', error.response?.data);
     throw error;
   }
 }

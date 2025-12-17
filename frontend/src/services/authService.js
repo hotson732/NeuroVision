@@ -1,5 +1,6 @@
 // services/authService.js
 import axios from 'axios';
+import { Navigate } from 'react-router-dom';
 
 // Crear instancia de axios
 const api = axios.create({
@@ -31,7 +32,8 @@ const isAuthenticated = () => {
 const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
-  window.location.href = '/login'; 
+  window.location.href = '/'; 
+  Navigate('/login');
 };
 
 api.interceptors.request.use(

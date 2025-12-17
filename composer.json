@@ -1,0 +1,6 @@
+{
+    "require": {
+        "google/apiclient": "^2.18",
+        "yaza/laravel-google-drive-storage": "^4.1"
+    }
+}
